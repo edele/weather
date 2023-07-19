@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import './style.css';
+// import './style.css';
+import React, { useEffect, useState } from "react";
 
-import { Thunder } from './weather/Thunder';
-import { Rain } from './weather/Rain';
+import { Thunder } from "./weather/Thunder";
+import { Rain } from "./weather/Rain";
 
-import { currentWeather, hourly, dailyForecast } from './data';
+import { currentWeather, hourly, dailyForecast } from "./data";
 
 export default function App() {
   const [current, setCurrent] = useState(currentWeather);
@@ -12,8 +12,8 @@ export default function App() {
   const [daily, setDaily] = useState(dailyForecast);
 
   if (!forecast.length || !daily.length) {
-    const forecast = localStorage.getItem('forecast');
-    const daily = localStorage.getItem('daily');
+    const forecast = localStorage.getItem("forecast");
+    const daily = localStorage.getItem("daily");
 
     try {
       const forecastData = JSON.parse(forecast);
@@ -31,14 +31,14 @@ export default function App() {
 
       setCurrent({
         ...current,
-        location: { name: 'Current Location', lat, lon },
+        location: { name: "Current Location", lat, lon },
       });
     });
   }, []);
 
   useEffect(() => {
     async function getWeather() {
-      const apiKey = '';
+      const apiKey = "";
       const apiUrl = `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${locationKey}?apikey=${apiKey}`;
 
       const response = await fetch(apiUrl);
@@ -46,7 +46,7 @@ export default function App() {
       setCurrent(data.current);
       setForecast(data.hourly);
 
-      localStorage.setItem('forecast', JSON.stringify(data.hourly));
+      localStorage.setItem("forecast", JSON.stringify(data.hourly));
     }
   }, []);
 
@@ -57,20 +57,20 @@ export default function App() {
         <div className="temp">{current.temp}</div>
         <div className="conditions">
           {current.cond == 0
-            ? 'Sunny'
+            ? "Sunny"
             : current.cond == 1
-            ? 'Partly Cloudy'
+            ? "Partly Cloudy"
             : current.cond == 2
-            ? 'Cloudy'
+            ? "Cloudy"
             : current.cond == 3
-            ? 'Light Rain'
+            ? "Light Rain"
             : current.cond == 4
-            ? 'Rain'
+            ? "Rain"
             : current.cond == 5
-            ? 'Heavy Rain'
+            ? "Heavy Rain"
             : current.cond == 6
-            ? 'Thunder'
-            : ''}
+            ? "Thunder"
+            : ""}
           <br />
           H:{current.range.max} L:{current.range.min}
         </div>
