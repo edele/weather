@@ -51,7 +51,7 @@ export default function App() {
   }, []);
 
   return (
-    <div>
+    <div id="root">
       <div className="header">
         <div className="location">{current.location.name}</div>
         <div className="temp">{current.temp}</div>
