@@ -13,12 +13,45 @@ export const getServerSideProps: GetServerSideProps<IAppProps> = async ({
 }) => {
   const detectedIp = requestIp.getClientIp(req);
 
+  if (!detectedIp) console.error("Failed to detect IP address");
+
+  const cityName = await getCityName(
+    process.env.TESTING_FAKE_IP_ADDRESS ?? detectedIp
+  );
+
   return {
     props: {
-      currentWeather,
+      currentWeather: {
+        ...currentWeather,
+        location: { ...currentWeather.location, name: cityName },
+      },
       hourly,
       dailyForecast,
-      detectedIp,
     },
   };
 };
+
+function getCityName(ip: string) {
+  const url = `http://www.geoplugin.net/json.gp?${new URLSearchParams({ ip })}`;
+
+  console.log(`Requesting IP info from ${url}`);
+
+  return fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(
+          `geoplugin.net responded with "${response.status}" status code.`
+        );
+      }
+      return response.json();
+    })
+    .then((json) => {
+      return json.geoplugin_city;
+    })
+    .catch((error) => {
+      console.error(
+        "Failed to get city name from geoplugin.net. Related error is logged below"
+      );
+      console.error(error);
+    });
+}

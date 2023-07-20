@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 0.0.4
+
+- **Display city name detected via IP address.** I used free [geoplugin.com](https://www.geoplugin.com/) service. In order to test different IP addresses locally you can set `TESTING_FAKE_IP_ADDRESS` env variable in `.env.local` file.
+- **Added logging to stderr and stdout.** Most hosting providers give you a way to read these logs, which is probably enough for this simple app.
+- **Removed IP address from UI.** Now we will test that city is detected. I will test it by using different VPN locations.
+
 ## Version 0.0.3
 
 - **Rewrite in Typescript.** Created typescript interfaces via [VS Code extension "JSON to TS"](https://marketplace.visualstudio.com/items?itemName=MariusAlchimavicius.json-to-ts) from fake data in [data.ts](src/data.ts) and put them in [weatherTypes.ts](src/weatherTypes.ts). Then converted all \*.js files to typescript.
