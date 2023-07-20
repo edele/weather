@@ -12,18 +12,15 @@ export interface IAppProps {
   currentWeather: ICurrentWeather;
   hourly: IHoulyItem[];
   dailyForecast: IDailyForecastItem[];
-  detectedIp: string;
 }
 
 export default function App(props: IAppProps) {
-  const { dailyForecast, currentWeather, hourly, detectedIp } = props;
+  const { dailyForecast, currentWeather, hourly } = props;
 
   return (
     <div id="root">
       <div className="header">
-        <div className="location">
-          {currentWeather.location.name}, IP: {detectedIp}
-        </div>
+        <div className="location">{currentWeather.location.name}</div>
 
         <div className="temp">{currentWeather.temp}</div>
         <div className="conditions">
