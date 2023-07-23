@@ -1,14 +1,10 @@
-import {
-  ICurrentWeather,
-  IDailyForecastItem,
-  IHoulyItem,
-} from "./weatherTypes";
+import { type ICurrentWeather, type IDailyForecastItem, type IHoulyItem } from "./weatherTypes";
 
 export const currentWeather: ICurrentWeather = {
   location: { lat: 59, lon: 17, name: "Stockholm" },
   temp: "21°",
   range: { min: "15°", max: "29°" },
-  cond: 1,
+  weatherText: "Cloudy",
 };
 
 export const hourly: IHoulyItem[] = [

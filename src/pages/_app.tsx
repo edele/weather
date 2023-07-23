@@ -1,7 +1,6 @@
-import React from "react";
-import { AppProps } from "next/app";
+import { type AppProps } from "next/app";
 import "../style.css";
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({ Component, pageProps }: AppProps): React.ReactNode {
   return <Component {...pageProps} />;
 }

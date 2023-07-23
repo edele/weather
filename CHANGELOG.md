@@ -20,3 +20,14 @@
 ## Version 0.0.1
 
 - **Intitialized as a Next.js app.** Weather App is something that users will open several times a day for short sessions: a minute or less. It is expected that the App loads instantly. This is why I consider making this app load server side and push prerendered html to it's users.
+
+```
+Alt: below is an ASCII art on a cat.
+
+   |\---/|
+   | ,_, |
+    \_`_/-..----.
+ ___/ `   ' ,""+ \
+(__...'   __\    |`.___.';
+  (_,...'(_,.`__)/'.....+
+```

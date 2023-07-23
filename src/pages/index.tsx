@@ -1,57 +1,41 @@
-import { GetServerSideProps } from "next";
+import { type GetServerSideProps } from "next";
 import React from "react";
 import requestIp from "request-ip";
-import App, { IAppProps } from "../App";
-import { currentWeather, dailyForecast, hourly } from "../data";
+import App, { type IAppProps as IAppProperties } from "../App";
+import { dailyForecast } from "../data";
+import { currentWeatherFromAW, hourlyForecastFromAW } from "../externalApis/accuweather/adapters";
+import { getAllTestAWData } from "../externalApis/accuweather/testData";
+import { getLocationData } from "../externalApis/geoplugin";
+import { getAWDailyForecast, getAllAWData } from "../externalApis/accuweather/requests";
 
-export default function Page(props: IAppProps) {
-  return <App {...props} />;
+export default function Page(properties: IAppProperties): React.ReactNode {
+  return <App {...properties} />;
 }
 
-export const getServerSideProps: GetServerSideProps<IAppProps> = async ({
-  req,
-}) => {
+const isDev = process.env.NODE_ENV === "development";
+
+export const getServerSideProps: GetServerSideProps<IAppProperties> = async ({ req }) => {
   const detectedIp = requestIp.getClientIp(req);
+  if (!detectedIp) return { notFound: true };
 
-  if (!detectedIp) console.error("Failed to detect IP address");
+  const ipAddress = process.env.TESTING_FAKE_IP_ADDRESS ?? detectedIp;
+  if (!ipAddress) return { notFound: true };
 
-  const cityName = await getCityName(
-    process.env.TESTING_FAKE_IP_ADDRESS ?? detectedIp
-  );
+  const geoResponse = await getLocationData(ipAddress);
+  if (!geoResponse) return { notFound: true };
+
+  const allAWData = isDev ? getAllTestAWData() : await getAllAWData(geoResponse.lat, geoResponse.long);
+
+  const { awLocation, awCurrentConditions, awHourlyForecast } = allAWData;
+
+  const awDailyForecast = await getAWDailyForecast(awLocation.Key);
+  console.log(JSON.stringify(awDailyForecast, null, 2));
 
   return {
     props: {
-      currentWeather: {
-        ...currentWeather,
-        location: { ...currentWeather.location, name: cityName },
-      },
-      hourly,
+      currentWeather: currentWeatherFromAW({ awLocation, awCurrentConditions, awHourlyForecast }),
+      hourly: hourlyForecastFromAW(awHourlyForecast),
       dailyForecast,
     },
   };
 };
-
-function getCityName(ip: string) {
-  const url = `http://www.geoplugin.net/json.gp?${new URLSearchParams({ ip })}`;
-
-  console.log(`Requesting IP info from ${url}`);
-
-  return fetch(url)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(
-          `geoplugin.net responded with "${response.status}" status code.`
-        );
-      }
-      return response.json();
-    })
-    .then((json) => {
-      return json.geoplugin_city;
-    })
-    .catch((error) => {
-      console.error(
-        "Failed to get city name from geoplugin.net. Related error is logged below"
-      );
-      console.error(error);
-    });
-}
