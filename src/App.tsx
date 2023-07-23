@@ -24,7 +24,8 @@ export default function App(props: IAppProps): React.ReactNode {
   return (
     <div id="root">
       <Head>
-        <meta name="viewport" content="initial-scale=1, viewport-fit=cover" />
+        <meta name="viewport" content="initial-scale=1" />
+        <meta name="theme-color" content="#011e33" />
       </Head>
       <div className="header">
         <div className="location">{currentWeather.location.name}</div>
