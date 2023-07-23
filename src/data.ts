@@ -1,19 +1,4 @@
-import { type ICurrentWeather, type IDailyForecastItem, type IHoulyItem } from "./weatherTypes";
-
-export const currentWeather: ICurrentWeather = {
-  location: { lat: 59, lon: 17, name: "Stockholm" },
-  temp: "21°",
-  range: { min: "15°", max: "29°" },
-  weatherText: "Cloudy",
-};
-
-export const hourly: IHoulyItem[] = [
-  { datetime: "Now", temperature: "21°", conditions: 6 },
-  { datetime: "10 PM", temperature: "21°", conditions: 6 },
-  { datetime: "11 PM", temperature: "20°", conditions: 6 },
-  { datetime: "12 PM", temperature: "19°", conditions: 6 },
-  { datetime: "13 PM", temperature: "18°", conditions: 6 },
-];
+import { type IDailyForecastItem } from "./weatherTypes";
 
 export const dailyForecast: IDailyForecastItem[] = [
   {
