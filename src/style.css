@@ -12,16 +12,17 @@ html {
 body {
   margin: 0;
   font-size: 1.6rem;
-
-  background: linear-gradient(to bottom, #011e33, #625a72);
-  color: white;
 }
 
 #root {
   display: grid;
   min-height: 100vh;
+  min-height: -webkit-fill-available;
   justify-content: center;
   align-items: center;
+
+  background: linear-gradient(to bottom, #011e33, #625a72);
+  color: white;
 }
 
 #root > div {
