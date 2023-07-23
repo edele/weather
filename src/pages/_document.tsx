@@ -5,7 +5,7 @@ class MyDocument extends Document {
   render(): React.JSX.Element {
     return (
       <Html>
-        <Head></Head>
+        <Head />
 
         <body>
           <Main />

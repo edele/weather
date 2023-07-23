@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React, { useMemo } from "react";
 import { type ICurrentWeather, type IDailyForecastItem, type IHoulyItem } from "./weatherTypes";
+import Head from "next/head";
 
 export interface IAppProps {
   currentWeather: ICurrentWeather;
@@ -22,6 +23,9 @@ export default function App(props: IAppProps): React.ReactNode {
 
   return (
     <div id="root">
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+      </Head>
       <div className="header">
         <div className="location">{currentWeather.location.name}</div>
 
