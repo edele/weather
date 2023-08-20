@@ -1,25 +1,24 @@
 export interface ICurrentWeather {
-  location: Location;
-  temp: string;
-  cond: number;
-  range: Range;
+  location: ILocation;
+  temp: number;
+  weatherText: string;
+  range: IRange;
+  cond: MyWeatherCondition;
 }
 
-interface Range {
-  min: string;
-  max: string;
+interface IRange {
+  min: string | number;
+  max: string | number;
 }
 
-interface Location {
-  lat: number;
-  lon: number;
+interface ILocation {
   name: string;
 }
 
 export interface IHoulyItem {
   datetime: string;
-  temperature: string;
-  conditions: number;
+  temperature: number;
+  conditions: MyWeatherCondition;
 }
 
 export interface IDailyForecastItem {
@@ -30,7 +29,16 @@ export interface IDailyForecastItem {
   periodRange: IRange;
 }
 
-interface IRange {
-  min: number;
-  max: number;
-}
+export type MyWeatherCondition =
+  | "clear"
+  | "cloudy"
+  | "fog"
+  | "freezing-rain"
+  | "haze"
+  | "night-clear"
+  | "night-cloudy"
+  | "night-drizzle"
+  | "partly-cloudy"
+  | "rain"
+  | "snow"
+  | "windy";

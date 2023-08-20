@@ -1,3 +1,17 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["next/core-web-vitals", "@eslint-recommended/eslint-config-typescript", "prettier"],
+  "rules": {
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/ban-types": "warn",
+    "unicorn/no-null": "off",
+    "unicorn/filename-case": "off",
+    "unicorn/prevent-abbreviations": "off",
+    "unicorn/switch-case-braces": "off",
+    "unicorn/numeric-separators-style": "off"
+  },
+
+  "parserOptions": {
+    "project": ["tsconfig.json"]
+  }
 }

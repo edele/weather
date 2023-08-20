@@ -1,12 +1,7 @@
-import React from "react";
-
-import { Rain } from "./weather/Rain";
-import { Thunder } from "./weather/Thunder";
-import {
-  ICurrentWeather,
-  IDailyForecastItem,
-  IHoulyItem,
-} from "./weatherTypes";
+import Image from "next/image";
+import React, { useMemo } from "react";
+import { type ICurrentWeather, type IDailyForecastItem, type IHoulyItem } from "./weatherTypes";
+import Head from "next/head";
 
 export interface IAppProps {
   currentWeather: ICurrentWeather;
@@ -14,33 +9,31 @@ export interface IAppProps {
   dailyForecast: IDailyForecastItem[];
 }
 
-export default function App(props: IAppProps) {
+export default function App(props: IAppProps): React.ReactNode {
   const { dailyForecast, currentWeather, hourly } = props;
+
+  const hourlyWithCurrent = useMemo(() => {
+    const now: IHoulyItem = {
+      datetime: "Now",
+      temperature: currentWeather.temp,
+      conditions: currentWeather.cond,
+    };
+    return [now, ...hourly];
+  }, [currentWeather.cond, currentWeather.temp, hourly]);
 
   return (
     <div id="root">
+      <Head>
+        <meta name="viewport" content="initial-scale=1" />
+        <meta name="theme-color" content="#011e33" />
+      </Head>
       <div className="header">
         <div className="location">{currentWeather.location.name}</div>
 
-        <div className="temp">{currentWeather.temp}</div>
-        <div className="conditions">
-          {currentWeather.cond == 0
-            ? "Sunny"
-            : currentWeather.cond == 1
-            ? "Partly Cloudy"
-            : currentWeather.cond == 2
-            ? "Cloudy"
-            : currentWeather.cond == 3
-            ? "Light Rain"
-            : currentWeather.cond == 4
-            ? "Rain"
-            : currentWeather.cond == 5
-            ? "Heavy Rain"
-            : currentWeather.cond == 6
-            ? "Thunder"
-            : ""}
-          <br />
-          H:{currentWeather.range.max} L:{currentWeather.range.min}
+        <div className="temp">{currentWeather.temp}°</div>
+        <div className="conditions">{currentWeather.weatherText}</div>
+        <div className="temp-hi-low">
+          H:{currentWeather.range.max} &nbsp;L:{currentWeather.range.min}
         </div>
       </div>
 
@@ -48,15 +41,29 @@ export default function App(props: IAppProps) {
         <div className="forecast-title">HOURLY FORECAST</div>
         <div className="scroller">
           <div className="forecast-list">
-            {hourly.map(({ datetime, temperature }) => (
-              <div className="forecast-item" key={datetime}>
-                <span>{datetime}</span>
-                <span>
-                  <Thunder />
-                </span>
-                <span>{temperature}</span>
-              </div>
-            ))}
+            {hourlyWithCurrent.map(({ datetime, temperature, conditions }, index) => {
+              const [hour, dayPeriod] = datetime.split(" ");
+              const isNow = index === 0;
+
+              return (
+                <div className="forecast-item" key={datetime}>
+                  <span className="forecast-time">
+                    {isNow ? (
+                      "Now"
+                    ) : (
+                      <>
+                        <span className="forecast-hour">{hour}</span>
+                        <span className="forecast-day-period">{dayPeriod}</span>
+                      </>
+                    )}
+                  </span>
+                  <div className="forecast-icon">
+                    <Image width={32} height={30} src={`/weather/${conditions}.png`} alt={conditions} />
+                  </div>
+                  <span className="forecast-temperature">{temperature}°</span>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -64,32 +71,25 @@ export default function App(props: IAppProps) {
       <div className="daily">
         <div className="daily-title">10-DAY FORECAST</div>
         <div className="daily-list">
-          {dailyForecast.map(
-            ({
-              datetime,
-              temp,
-              range: { min, max },
-              periodRange: { min: lowest, max: highest },
-            }) => (
-              <div className="daily-row" key={datetime}>
-                <div className="daily-time">{datetime}</div>
+          {dailyForecast.map(({ datetime, temp, range: { min, max }, periodRange: { min: lowest, max: highest } }) => (
+            <div className="daily-row" key={datetime}>
+              <div className="daily-time">{datetime}</div>
 
-                <div className="daily-conditions">
-                  <Rain />
-                  <span className="probability">60%</span>
-                </div>
-
-                <div className="daily-range">
-                  <span className="daily-min">{min}°</span>
-                  <span className="range">
-                    <span className="range-meter" />
-                    <span className="range-current" />
-                  </span>
-                  <span className="daily-max">{max}°</span>
-                </div>
+              <div className="daily-conditions">
+                <Image width={25.6} height={24} src={`/weather/rain.png`} alt="rain" />
+                <span className="probability">60%</span>
               </div>
-            )
-          )}
+
+              <div className="daily-range">
+                <span className="daily-min">{min}°</span>
+                <span className="range">
+                  <span className="range-meter" />
+                  <span className="range-current" />
+                </span>
+                <span className="daily-max">{max}°</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

@@ -2,10 +2,10 @@ import React from "react";
 import Document, { Html, Head, Main, NextScript } from "next/document";
 
 class MyDocument extends Document {
-  render() {
+  render(): React.JSX.Element {
     return (
       <Html>
-        <Head></Head>
+        <Head />
 
         <body>
           <Main />
