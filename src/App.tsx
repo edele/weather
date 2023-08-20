@@ -30,7 +30,7 @@ export default function App(props: IAppProps): React.ReactNode {
       <div className="header">
         <div className="location">{currentWeather.location.name}</div>
 
-        <div className="temp">{currentWeather.temp}</div>
+        <div className="temp">{currentWeather.temp}°</div>
         <div className="conditions">{currentWeather.weatherText}</div>
         <div className="temp-hi-low">
           H:{currentWeather.range.max} &nbsp;L:{currentWeather.range.min}
@@ -60,7 +60,7 @@ export default function App(props: IAppProps): React.ReactNode {
                   <div className="forecast-icon">
                     <Image width={32} height={30} src={`/weather/${conditions}.png`} alt={conditions} />
                   </div>
-                  <span className="forecast-temperature">{temperature}</span>
+                  <span className="forecast-temperature">{temperature}°</span>
                 </div>
               );
             })}
